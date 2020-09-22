@@ -83,10 +83,19 @@ class Store {
 
         localStorage.setItem('books', JSON.stringify(books));
     }
-    static removeBook() {
+    static removeBook(isbn) {
+        const books = Store.getBooks();
 
+        books.forEach(function (book, index) {
+            if (book.isbn === isbn) {
+                books.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('books', JSON.stringify(books));
     }
 }
+
 //Event Listers
 // DOM Load Event
 
@@ -129,6 +138,8 @@ document.getElementById('book-form').addEventListener('submit',
 document.getElementById('book-list').addEventListener('click', function (e) {
     const ui = new UI();
     ui.deleteBook(e.target);
+
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent)
 
     //show msg
 
